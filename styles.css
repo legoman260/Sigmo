@@ -1,0 +1,783 @@
+@font-face{
+    font-family: opensans;
+    font-weight: normal;
+    font-style: normal;
+    src: url("shr/ofont.ru_Pastry\ Chef.ttf;")
+}
+
+:root {
+    --primary-color: #2d3436;
+    --secondary-color: #636e72;
+    --text-color: #ffffff;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    --star-color: #ffffff;
+    --meteor-color: #ffeaa7;
+    --spaceship-color: #74b9ff;
+    /* Цвета для разного времени суток */
+    --morning-sky-top: #B6CEFF;
+    --morning-sky-middle: #FFC8A2;
+    --morning-sky-bottom: #FFE5D9;
+    
+    --day-sky-top: #64B5F6;
+    --day-sky-middle: #90CAF9;
+    --day-sky-bottom: #BBDEFB;
+    
+    --evening-sky-top: #FF7E5F;
+    --evening-sky-middle: #FEB47B;
+    --evening-sky-bottom: #FFD4B2;
+    
+    --night-sky-top: #1A237E;
+    --night-sky-middle: #283593;
+    --night-sky-bottom: #3949AB;
+}
+
+html {
+    height: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    color: var(--text-color);
+    line-height: 1.6;
+    position: relative;
+    overflow-x: hidden;
+    background: linear-gradient(
+        180deg,
+        #0a192f 0%,
+        #20314e 50%,
+        #2c5282 100%
+    );
+}
+
+.sky-gradient {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.morning {
+    background: linear-gradient(
+        180deg,
+        var(--morning-sky-top) 0%,
+        var(--morning-sky-middle) 50%,
+        var(--morning-sky-bottom) 100%
+    );
+}
+
+.day {
+    background: linear-gradient(
+        180deg,
+        var(--day-sky-top) 0%,
+        var(--day-sky-middle) 50%,
+        var(--day-sky-bottom) 100%
+    );
+}
+
+.evening {
+    background: linear-gradient(
+        180deg,
+        var(--evening-sky-top) 0%,
+        var(--evening-sky-middle) 50%,
+        var(--evening-sky-bottom) 100%
+    );
+}
+
+.night {
+    background: linear-gradient(
+        180deg,
+        var(--night-sky-top) 0%,
+        var(--night-sky-middle) 50%,
+        var(--night-sky-bottom) 100%
+    );
+}
+
+/* Солнце/Луна */
+.celestial {
+    position: fixed;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    transition: all 0.5s ease;
+    z-index: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Закат */
+.sunset {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60%;
+    background: linear-gradient(
+        180deg,
+        #ff7e5f 0%,
+        #feb47b 50%,
+        transparent 100%
+    );
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Солнце */
+.sun {
+    position: fixed;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle,
+        rgba(255, 247, 230, 1) 0%,
+        rgba(255, 215, 0, 0.8) 30%,
+        rgba(255, 126, 95, 0.4) 70%,
+        transparent 100%
+    );
+    box-shadow: 0 0 100px rgba(255, 215, 0, 0.5);
+    top: 40px;
+    right: 80px;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.moon {
+    background: radial-gradient(
+        circle at 65% 35%,
+        rgba(255, 255, 255, 1) 0%,
+        rgba(224, 224, 224, 0.8) 50%,
+        transparent 100%
+    );
+    box-shadow: 0 0 50px rgba(255, 255, 255, 0.3);
+}
+
+/* Солнце */
+body::before {
+    content: '';
+    position: fixed;
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(
+        circle,
+        #fff7e6 0%,
+        #ffd700 30%,
+        #ff7e5f 70%,
+        transparent 100%
+    );
+    border-radius: 50%;
+    top: 40px;
+    right: 80px;
+    box-shadow: 0 0 100px #ffd700;
+    z-index: 0;
+    animation: glow 5s ease-in-out infinite alternate;
+    opacity: 0.9;
+}
+
+/* Горы и деревья */
+body::after {
+    content: '';
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60%;
+    background-image: 
+        /* Дальние горы */
+        linear-gradient(165deg, transparent 0%, transparent 50%, #2b3f6b 50%, #2b3f6b 100%),
+        linear-gradient(-165deg, transparent 0%, transparent 50%, #374d7c 50%, #374d7c 100%),
+        /* Ближние горы */
+        linear-gradient(165deg, transparent 0%, transparent 60%, #1a2436 60%, #1a2436 100%),
+        linear-gradient(-165deg, transparent 0%, transparent 60%, #202b42 60%, #202b42 100%),
+        /* Деревья */
+        radial-gradient(circle at 20% 100%, #0f1724 0%, #0f1724 2%, transparent 2.5%),
+        radial-gradient(circle at 30% 100%, #0f1724 0%, #0f1724 3%, transparent 3.5%),
+        radial-gradient(circle at 40% 100%, #0f1724 0%, #0f1724 2%, transparent 2.5%),
+        radial-gradient(circle at 60% 100%, #0f1724 0%, #0f1724 3%, transparent 3.5%),
+        radial-gradient(circle at 70% 100%, #0f1724 0%, #0f1724 2%, transparent 2.5%),
+        radial-gradient(circle at 80% 100%, #0f1724 0%, #0f1724 3%, transparent 3.5%);
+    background-size: 100% 100%;
+    z-index: 1;
+}
+
+/* Облака */
+.clouds {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 70% 40%, rgba(255, 255, 255, 0.3) 0%, transparent 40%),
+        radial-gradient(circle at 40% 60%, rgba(255, 255, 255, 0.3) 0%, transparent 30%);
+    z-index: 2;
+    pointer-events: none;
+    animation: clouds 60s linear infinite;
+}
+
+@keyframes glow {
+    from { box-shadow: 0 0 100px #ffd700; }
+    to { box-shadow: 0 0 150px #ff7e5f; }
+}
+
+@keyframes clouds {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(100%); }
+}
+
+.nikita {
+    position: relative;
+    z-index: 4;
+    text-align: center;
+    margin-bottom: 2rem;
+    transform: translateY(20px);
+    opacity: 0;
+    animation: fadeInUp 1s ease forwards;
+}
+
+h1 {
+    font-size: 4.5rem;
+    margin: 0;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+    text-shadow: var(--text-shadow);
+    animation: titleGlow 3s ease-in-out infinite;
+}
+
+h2 {
+    font-size: 2.5rem;
+    font-weight: 500;
+    margin: 0;
+    color: #ffffff;
+    text-shadow: var(--text-shadow);
+    opacity: 0.9;
+}
+
+.content-wrapper {
+    position: relative;
+    z-index: 10;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+div:not(.nikita):not(.stars):not(.meteors):not(.spaceships) {
+    position: relative;
+    z-index: 4;
+    text-align: center;
+    margin: 2rem auto;
+    max-width: 800px;
+    opacity: 1;
+}
+
+p {
+    font-size: 1.3rem;
+    color: #ffffff;
+    margin: 1rem 0;
+    text-shadow: var(--text-shadow);
+}
+
+.photo-section {
+    margin: 2rem auto;
+    padding: 1rem;
+}
+
+img {
+    max-width: 400px;
+    height: auto;
+    border-radius: 20px;
+    margin: 1.5rem auto;
+    display: block;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+    filter: brightness(0.9) contrast(1.1);
+}
+
+img:hover {
+    transform: scale(1.02);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+}
+
+/* Падающие листья */
+.leaf {
+    position: fixed;
+    z-index: 2;
+    width: 20px;
+    height: 20px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23ffd700' d='M17,8C8,10,5.9,16.17,3.82,21.34L5.71,22l1-2.3A4.49,4.49,0,0,0,8,20C19,20,22,3,22,3,21,5,14,5.25,9,6.25S2,11.5,2,13.5a6.22,6.22,0,0,0,1.75,3.75C7,8,17,8,17,8Z'/%3E%3C/svg%3E");
+    opacity: 0.6;
+    animation: falling 10s infinite linear;
+}
+
+/* Птицы */
+.bird {
+    position: fixed;
+    z-index: 2;
+    width: 15px;
+    height: 15px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23ffffff' d='M23,11.5l-3.5-2L21,8l-3.5-2L19,4.5L12,2L9.5,4.5L8,3L5.5,5L4,3.5L1,6l2,1.5L1,9l2,1.5L1,12l4,2l-2,1.5l2,1.5l-1,1.5l3,1.5l-0.5,1.5l3,1.5L12,22l2.5-1.5l3,1.5l-0.5-1.5l3-1.5l-1-1.5l2-1.5l-2-1.5l4-2l-2-1.5l2-1.5l-2-1.5l2-1.5L23,11.5z'/%3E%3C/svg%3E");
+    animation: flying 15s infinite linear;
+}
+
+/* Трава */
+.grass {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background: repeating-linear-gradient(
+        80deg,
+        #0f1724 0px,
+        #0f1724 2px,
+        transparent 2px,
+        transparent 10px
+    );
+    animation: waving 3s infinite ease-in-out;
+    z-index: 2;
+    transform-origin: bottom;
+}
+
+/* Звезды */
+.stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.stars::before,
+.stars::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(2px 2px at 20px 30px, var(--star-color), rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 40px 70px, var(--star-color), rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 50px 160px, var(--star-color), rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 90px 40px, var(--star-color), rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 130px 80px, var(--star-color), rgba(0,0,0,0));
+    background-repeat: repeat;
+    background-size: 200px 200px;
+    animation: twinkle 4s infinite;
+    opacity: 0.8;
+}
+
+.stars::after {
+    background-size: 300px 300px;
+    animation-delay: 2s;
+}
+
+/* Метеоры */
+.meteors {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.meteors::before {
+    content: '';
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: var(--meteor-color);
+    border-radius: 50%;
+    box-shadow: 0 0 10px 2px var(--meteor-color);
+    animation: meteor 6s linear infinite;
+    opacity: 0;
+}
+
+.meteors::after {
+    content: '';
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: var(--meteor-color);
+    border-radius: 50%;
+    box-shadow: 0 0 8px 2px var(--meteor-color);
+    animation: meteor 8s linear infinite;
+    animation-delay: 3s;
+    opacity: 0;
+}
+
+/* Космические корабли */
+.spaceships {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    pointer-events: none;
+}
+
+/* X-Wing */
+.spaceships::before {
+    content: '';
+    position: absolute;
+    width: 60px;
+    height: 40px;
+    background: transparent;
+    animation: spaceship 20s linear infinite;
+    opacity: 0.8;
+    background-image: 
+        /* Основной корпус */
+        linear-gradient(90deg, #666 40%, #888 60%, #666 80%),
+        /* Верхние крылья */
+        linear-gradient(45deg, transparent 0%, transparent 40%, #d1d1d1 40%, #d1d1d1 60%, transparent 60%),
+        linear-gradient(-45deg, transparent 0%, transparent 40%, #d1d1d1 40%, #d1d1d1 60%, transparent 60%),
+        /* Нижние крылья */
+        linear-gradient(135deg, transparent 0%, transparent 40%, #d1d1d1 40%, #d1d1d1 60%, transparent 60%),
+        linear-gradient(-135deg, transparent 0%, transparent 40%, #d1d1d1 40%, #d1d1d1 60%, transparent 60%),
+        /* Двигатели */
+        radial-gradient(circle at 70% 50%, #ff3300 0%, transparent 50%);
+    background-size: 100% 20%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 30% 30%;
+    background-repeat: no-repeat;
+    background-position: center, center, center, center, center, right;
+    transform-origin: center;
+}
+
+/* TIE Fighter */
+.spaceships::after {
+    content: '';
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background: transparent;
+    animation: tieFighter 25s linear infinite;
+    animation-delay: 10s;
+    opacity: 0.8;
+    background-image: 
+        /* Центральная кабина */
+        radial-gradient(circle at center, #444 0%, #666 40%, transparent 50%),
+        /* Боковые панели */
+        linear-gradient(90deg, transparent 35%, #888 35%, #888 40%, #444 40%, #444 60%, #888 60%, #888 65%, transparent 65%),
+        linear-gradient(0deg, transparent 35%, #888 35%, #888 40%, #444 40%, #444 60%, #888 60%, #888 65%, transparent 65%);
+    background-size: 40% 40%, 100% 100%, 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center, center, center;
+}
+
+/* Анимации */
+@keyframes falling {
+    0% {
+        transform: translate(0, -100px) rotate(0deg);
+    }
+    100% {
+        transform: translate(100px, 100vh) rotate(360deg);
+    }
+}
+
+@keyframes flying {
+    0% {
+        transform: translate(-100px, 50vh) scale(1);
+    }
+    50% {
+        transform: translate(50vw, 20vh) scale(-1, 1);
+    }
+    100% {
+        transform: translate(100vw, 40vh) scale(1);
+    }
+}
+
+@keyframes waving {
+    0%, 100% {
+        transform: skewX(-15deg);
+    }
+    50% {
+        transform: skewX(15deg);
+    }
+}
+
+@keyframes twinkle {
+    0%, 100% {
+        opacity: 0.8;
+    }
+    50% {
+        opacity: 0.3;
+    }
+}
+
+@keyframes meteor {
+    0% {
+        transform: translate(120vw, -20vh) rotate(45deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    20% {
+        opacity: 1;
+    }
+    30% {
+        opacity: 0;
+    }
+    100% {
+        transform: translate(-20vw, 120vh) rotate(45deg);
+        opacity: 0;
+    }
+}
+
+@keyframes spaceship {
+    0% {
+        transform: translate(-100px, 30vh) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.8;
+    }
+    90% {
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate(calc(100vw + 100px), 40vh) rotate(0deg);
+        opacity: 0;
+    }
+}
+
+@keyframes tieFighter {
+    0% {
+        transform: translate(calc(100vw + 100px), 60vh) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.8;
+    }
+    90% {
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate(-100px, 70vh) rotate(0deg);
+        opacity: 0;
+    }
+}
+
+/* Удаляем старый класс травы и добавляем холмы */
+.hills {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 150px;
+    z-index: 2;
+    background: 
+        radial-gradient(1000px 600px at 50% 800px, 
+            rgba(27, 39, 53, 0.9) 0%,
+            rgba(27, 39, 53, 0.9) 40%,
+            transparent 40.1%),
+        radial-gradient(800px 500px at 20% 750px,
+            rgba(15, 23, 36, 0.95) 0%,
+            rgba(15, 23, 36, 0.95) 40%,
+            transparent 40.1%),
+        radial-gradient(600px 400px at 80% 700px,
+            rgba(15, 23, 36, 1) 0%,
+            rgba(15, 23, 36, 1) 40%,
+            transparent 40.1%);
+    pointer-events: none;
+}
+
+@keyframes hillsMove {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(-50px);
+    }
+}
+
+/* Добавляем отражение в воде */
+.reflection {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(
+        0deg,
+        rgba(174, 217, 224, 0.2) 0%,
+        transparent 80%
+    );
+    z-index: 1;
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+@keyframes reflect {
+    0%, 100% {
+        transform: scaleY(1);
+    }
+    50% {
+        transform: scaleY(1.1);
+    }
+}
+
+/* Индикатор времени суток */
+.time-indicator {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 20px;
+    font-size: 1.2rem;
+    z-index: 5;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes titleGlow {
+    0%, 100% {
+        filter: drop-shadow(0 0 10px rgba(116, 185, 255, 0.8));
+    }
+    50% {
+        filter: drop-shadow(0 0 20px rgba(116, 185, 255, 0.4));
+    }
+}
+
+a {
+    display: inline-block;
+    padding: 12px 24px;
+    margin: 10px;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    text-shadow: var(--text-shadow);
+}
+
+a:hover {
+    transform: translateY(-2px);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+/* Стили для кнопок */
+.cosmic-button {
+    display: inline-block;
+    padding: 15px 30px;
+    margin: 15px;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-shadow: var(--text-shadow);
+    background: linear-gradient(45deg, #4a00e0, #8e2de2);
+    border: 2px solid #8e2de2;
+    box-shadow: 0 0 15px rgba(142, 45, 226, 0.4);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.cosmic-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 25px rgba(142, 45, 226, 0.6);
+    border-color: #b388ff;
+}
+
+.cosmic-button:active {
+    transform: translateY(1px);
+}
+
+/* Стили для дополнительных страниц */
+.gallery-page,
+.secret-page {
+    background: linear-gradient(
+        135deg,
+        #1a1a2e 0%,
+        #16213e 50%,
+        #1a1a2e 100%
+    );
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+.gallery-page h1,
+.secret-page h1 {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 3.5rem;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.gallery-item {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    border-radius: 15px;
+    transition: transform 0.3s ease;
+}
+
+.gallery-item:hover {
+    transform: translateY(-5px);
+}
+
+.gallery-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.home-button {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: linear-gradient(45deg, #ff4e50, #f9d423);
+    border: 2px solid #f9d423;
+    box-shadow: 0 0 15px rgba(249, 212, 35, 0.4);
+}
+
+.home-button:hover {
+    border-color: #ffd700;
+    box-shadow: 0 0 25px rgba(249, 212, 35, 0.6);
+}
+
+/* Анимация для кнопок */
+@keyframes buttonGlow {
+    0%, 100% {
+        box-shadow: 0 0 15px rgba(142, 45, 226, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 25px rgba(142, 45, 226, 0.6);
+    }
+}
